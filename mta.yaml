@@ -1,3 +1,42 @@
 _schema-version: "3.2"
 ID: SAPWorkflowPrac
 version: 0.0.1
+modules:
+- name: sapworkflowprac-approuter
+  type: approuter.nodejs
+  path: sapworkflowprac-approuter
+  requires:
+  - name: SAPWorkflowPrac_html_repo_runtime
+  parameters:
+    disk-quota: 256M
+    memory: 256M
+- name: SAPWorkflowPrac_ui_deployer
+  type: com.sap.application.content
+  path: .
+  requires:
+  - name: SAPWorkflowPrac_html_repo_host
+    parameters:
+      content-target: true
+- name: prac-workflow-module
+  type: com.sap.application.content
+  path: prac-workflow-module
+  requires:
+  - name: workflow
+    parameters:
+      content-target: true
+resources:
+- name: SAPWorkflowPrac_html_repo_runtime
+  type: org.cloudfoundry.managed-service
+  parameters:
+    service: html5-apps-repo
+    service-plan: app-runtime
+- name: SAPWorkflowPrac_html_repo_host
+  type: org.cloudfoundry.managed-service
+  parameters:
+    service: html5-apps-repo
+    service-plan: app-host
+- name: workflow
+  type: org.cloudfoundry.managed-service
+  parameters:
+    service: workflow
+    service-plan: lite
